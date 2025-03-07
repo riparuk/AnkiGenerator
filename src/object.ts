@@ -9,6 +9,9 @@ const question_answer = z.object({
   answer: z.string().describe("Answer extracted from the chunk"),
 });
 
+const outline = z.object({
+  outline: z.string(),
+});
 
 // list of question_answer in objects
 export const question_answer_list = z.object({
@@ -18,4 +21,8 @@ export const question_answer_list = z.object({
 // list of information
 export const information_list = z.object({
   information_list: z.array(information),
+});
+
+export const outline_list = z.object({
+	outline_list: z.array(outline),
 });

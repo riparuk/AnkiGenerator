@@ -1,11 +1,12 @@
-import { question_answer_list, information_list } from "./objects";
+import { question_answer_list, information_list, outline_list } from "./object";
 import { z } from 'zod';
-import {generate_from_list} from "./template";
+import {generate_from_list, generate_from_string} from "./template";
 import { textSplitter } from "./config";
 
 // interfaces
 export type QuestionAnswerList = z.infer<typeof question_answer_list>;
 export type InformationList = z.infer<typeof information_list>;
+export type OutlineList = z.infer<typeof outline_list>;
 
 
 export async function generate_question_answer(informations: string[]): Promise<QuestionAnswerList> {
@@ -39,4 +40,15 @@ export async function split_text(text: string): Promise<string[]> {
   console.log("Total text splitted: ", texts.length);
 
   return texts;
+}
+
+export async function generate_outline(prompt: string): Promise<OutlineList> {
+  const result = await generate_from_string<OutlineList>(
+	prompt,
+	"Create max 4 outline from this prompt\n\n Prompt : {context}",
+	outline_list
+  );
+
+  return result;
+
 }

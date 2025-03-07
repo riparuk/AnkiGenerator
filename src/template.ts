@@ -46,3 +46,27 @@ export async function generate_from_list<T extends Record<string, any>>(
 
   return combinedResult;
 }
+
+export async function generate_from_string<T>(
+  text: string,
+  system_prompt: string,
+  outputSchema: z.ZodType<T>
+): Promise<T> {
+
+  const promptTemplate = ChatPromptTemplate.fromMessages([
+	["system", system_prompt],
+	]);
+
+	const promptValue = await promptTemplate.invoke({
+	  context: text,
+	});
+
+	const runLLM = llm.withStructuredOutput(outputSchema);
+
+	const response = await runLLM.invoke(promptValue);
+
+	const parsedResponse = outputSchema.parse(response);
+	console.log("Generated from text");
+
+	return parsedResponse;
+}
